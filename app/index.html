@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>web audio api</title>
+  <link rel="stylesheet" href="css/app.css" />
+  <script src="lib/angular.js"></script>
+  <script src="js/app.js"></script>
+</head>
+<body ng-app="WebAudio" ng-controller="MainController">
+  <div class="transport">
+    <button ng-click="play()">Play</button>
+    <button ng-click="stop()">Stop</button>
+  </div>
+
+  <form class="eq">
+    <div ng-repeat="control in channelStrip.controls | filter:{type:'biquad'}">
+      {{control.name}}: {{control.node.gain.value}}
+      <input type="range" min="{{control.limits.gain.min}}" max="{{control.limits.gain.max}}" ng-model="control.node.gain.value" />
+
+      <input type="range" min="{{control.limits.frequency.min}}" max="{{control.limits.frequency.max}}" ng-model="control.node.frequency.value" ng-if="control.node.type == 'peaking'" />
+    </div>
+  </form>
+</body>
+</html>
