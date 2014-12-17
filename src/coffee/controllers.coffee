@@ -13,6 +13,8 @@ class MainController
     @$scope.masterFader = @$scope.audioEngine.createGain()
     @$scope.masterFader.connect(@$scope.audioEngine.destination)
 
+    @$scope.isPlaying = false
+
   buildChannelStrip: ->
     # create audio nodes for each control
     for control in @$scope.channelStrip.controls
@@ -42,16 +44,19 @@ class MainController
       @$scope.audioEngine.decodeAudioData(response.data, @_createBufferNode)
 
   _createBufferNode: (buffer) =>
-      @$scope.channelStrip.source.node = @$scope.audioEngine.createBufferSource()
-      @$scope.channelStrip.source.node.buffer = buffer
-      @$scope.channelStrip.source.node.loop = true
-      @$scope.channelStrip.source.node.connect(@$scope.channelStrip.controls[0].node)
+      @$scope.channelStrip.source.buffer = buffer
 
   play: =>
+    @$scope.channelStrip.source.node = @$scope.audioEngine.createBufferSource()
+    @$scope.channelStrip.source.node.buffer = @$scope.channelStrip.source.buffer
+    @$scope.channelStrip.source.node.loop = true
+    @$scope.channelStrip.source.node.connect(@$scope.channelStrip.controls[0].node)
     @$scope.channelStrip.source.node.start(0, 0)
+    @$scope.isPlaying = true
 
   stop: =>
     @$scope.channelStrip.source.node.stop(0)
+    @$scope.isPlaying = false
 
 angular.module('WebAudio', [])
   .controller 'MainController', ['$scope', '$http', 'channelStripFactory', MainController]

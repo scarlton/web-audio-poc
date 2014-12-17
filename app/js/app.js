@@ -24,7 +24,8 @@ MainController = (function() {
   MainController.prototype.initAudioEngine = function() {
     this.$scope.audioEngine = new window.AudioContext();
     this.$scope.masterFader = this.$scope.audioEngine.createGain();
-    return this.$scope.masterFader.connect(this.$scope.audioEngine.destination);
+    this.$scope.masterFader.connect(this.$scope.audioEngine.destination);
+    return this.$scope.isPlaying = false;
   };
 
   MainController.prototype.buildChannelStrip = function() {
@@ -69,18 +70,21 @@ MainController = (function() {
   };
 
   MainController.prototype._createBufferNode = function(buffer) {
-    this.$scope.channelStrip.source.node = this.$scope.audioEngine.createBufferSource();
-    this.$scope.channelStrip.source.node.buffer = buffer;
-    this.$scope.channelStrip.source.node.loop = true;
-    return this.$scope.channelStrip.source.node.connect(this.$scope.channelStrip.controls[0].node);
+    return this.$scope.channelStrip.source.buffer = buffer;
   };
 
   MainController.prototype.play = function() {
-    return this.$scope.channelStrip.source.node.start(0, 0);
+    this.$scope.channelStrip.source.node = this.$scope.audioEngine.createBufferSource();
+    this.$scope.channelStrip.source.node.buffer = this.$scope.channelStrip.source.buffer;
+    this.$scope.channelStrip.source.node.loop = true;
+    this.$scope.channelStrip.source.node.connect(this.$scope.channelStrip.controls[0].node);
+    this.$scope.channelStrip.source.node.start(0, 0);
+    return this.$scope.isPlaying = true;
   };
 
   MainController.prototype.stop = function() {
-    return this.$scope.channelStrip.source.node.stop(0);
+    this.$scope.channelStrip.source.node.stop(0);
+    return this.$scope.isPlaying = false;
   };
 
   return MainController;
@@ -100,7 +104,7 @@ angular.module('WebAudio').factory('channelStripFactory', function() {
           gain: 1
         }
       }, {
-        name: 'HI',
+        name: 'HF',
         type: 'biquad',
         parameters: {
           type: 'highshelf',
@@ -114,11 +118,11 @@ angular.module('WebAudio').factory('channelStripFactory', function() {
           }
         }
       }, {
-        name: 'MID',
+        name: 'HM',
         type: 'biquad',
         parameters: {
           type: 'peaking',
-          frequency: 2500,
+          frequency: 3000,
           gain: 0,
           Q: 1.414
         },
@@ -128,12 +132,31 @@ angular.module('WebAudio').factory('channelStripFactory', function() {
             min: -15
           },
           frequency: {
-            max: 8000,
-            min: 100
+            max: 15000,
+            min: 500
           }
         }
       }, {
-        name: 'LOW',
+        name: 'LM',
+        type: 'biquad',
+        parameters: {
+          type: 'peaking',
+          frequency: 180,
+          gain: 0,
+          Q: 1.414
+        },
+        limits: {
+          gain: {
+            max: 15,
+            min: -15
+          },
+          frequency: {
+            max: 1000,
+            min: 35
+          }
+        }
+      }, {
+        name: 'LF',
         type: 'biquad',
         parameters: {
           type: 'lowshelf',

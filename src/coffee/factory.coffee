@@ -6,7 +6,7 @@ angular.module('WebAudio').factory 'channelStripFactory', ->
       parameters:
         gain: 1
     ,
-      name: 'HI'
+      name: 'HF'
       type: 'biquad'
       parameters:
         type: 'highshelf'
@@ -17,11 +17,11 @@ angular.module('WebAudio').factory 'channelStripFactory', ->
           max: 15
           min: -15
     ,
-      name: 'MID'
+      name: 'HM'
       type: 'biquad'
       parameters:
         type: 'peaking'
-        frequency: 2500
+        frequency: 3000
         gain: 0
         Q: 1.414
       limits:
@@ -29,10 +29,25 @@ angular.module('WebAudio').factory 'channelStripFactory', ->
           max: 15
           min: -15
         frequency:
-          max: 8000
-          min: 100
+          max: 15000
+          min: 500
     ,
-      name: 'LOW'
+      name: 'LM'
+      type: 'biquad'
+      parameters:
+        type: 'peaking'
+        frequency: 180
+        gain: 0
+        Q: 1.414
+      limits:
+        gain:
+          max: 15
+          min: -15
+        frequency:
+          max: 1000
+          min: 35
+    ,
+      name: 'LF'
       type: 'biquad'
       parameters:
         type: 'lowshelf'
