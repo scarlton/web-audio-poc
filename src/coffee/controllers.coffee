@@ -3,15 +3,16 @@ class MainController
     @$scope.channelStrip = channelStripFactory
     @$scope.play = @play
     @$scope.stop = @stop
+    @$scope.reset = @reset
 
     @initAudioEngine()
     @buildChannelStrip()
 
   initAudioEngine: ->
-    @$scope.audioEngine = new window.AudioContext()
+    @audioEngine = new window.AudioContext()
 
-    @$scope.masterFader = @$scope.audioEngine.createGain()
-    @$scope.masterFader.connect(@$scope.audioEngine.destination)
+    @masterFader = @audioEngine.createGain()
+    @masterFader.connect(@audioEngine.destination)
 
     @$scope.isPlaying = false
 
@@ -20,10 +21,10 @@ class MainController
     for control in @$scope.channelStrip.controls
       switch control.type
         when 'gain'
-          control.node = @$scope.audioEngine.createGain()
+          control.node = @audioEngine.createGain()
 
         when 'biquad'
-          control.node = @$scope.audioEngine.createBiquadFilter()
+          control.node = @audioEngine.createBiquadFilter()
 
       # fill in default parameters from the factory object
       for own param, value of control.parameters
@@ -38,16 +39,16 @@ class MainController
         control.node.connect(@$scope.channelStrip.controls[idx+1].node)
       else
         # connect the last node to the mix bus
-        control.node.connect(@$scope.masterFader)
+        control.node.connect(@masterFader)
 
-    @$http.get('assets/snare4.wav', responseType: 'arraybuffer').then (response) =>
-      @$scope.audioEngine.decodeAudioData(response.data, @_createBufferNode)
+    @$http.get(@$scope.channelStrip.source.file, responseType: 'arraybuffer').then (response) =>
+      @audioEngine.decodeAudioData(response.data, @_createBufferNode)
 
   _createBufferNode: (buffer) =>
       @$scope.channelStrip.source.buffer = buffer
 
   play: =>
-    @$scope.channelStrip.source.node = @$scope.audioEngine.createBufferSource()
+    @$scope.channelStrip.source.node = @audioEngine.createBufferSource()
     @$scope.channelStrip.source.node.buffer = @$scope.channelStrip.source.buffer
     @$scope.channelStrip.source.node.loop = true
     @$scope.channelStrip.source.node.connect(@$scope.channelStrip.controls[0].node)
@@ -58,5 +59,13 @@ class MainController
     @$scope.channelStrip.source.node.stop(0)
     @$scope.isPlaying = false
 
-angular.module('WebAudio', [])
+  reset: =>
+    for control in @$scope.channelStrip.controls
+      for own param, value of control.parameters
+        if param is 'type'
+          control.node.type = value
+        else
+          control.node[param].value = value
+
+angular.module('webAudioApp')
   .controller 'MainController', ['$scope', '$http', 'channelStripFactory', MainController]

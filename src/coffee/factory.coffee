@@ -1,5 +1,6 @@
-angular.module('WebAudio').factory 'channelStripFactory', ->
-  source: {}
+angular.module('webAudioApp').factory 'channelStripFactory', ->
+  source:
+    file: 'assets/snare4.wav'
   controls: [
       name: 'Input gain'
       type: 'gain'
