@@ -1,1 +1,1 @@
-angular.module('webAudioApp', [])
+angular.module('webAudioApp', ['ui.router'])

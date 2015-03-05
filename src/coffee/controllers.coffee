@@ -1,9 +1,9 @@
 class MainController
   constructor: (@$scope, @$http, channelStripFactory) ->
     @$scope.channelStrip = channelStripFactory
-    @$scope.play = @play
-    @$scope.stop = @stop
-    @$scope.reset = @reset
+    @$scope.$on('play', @play)
+    @$scope.$on('stop', @stop)
+    # @$scope.reset = @reset
 
     @initAudioEngine()
     @buildChannelStrip()
@@ -13,8 +13,6 @@ class MainController
 
     @masterFader = @audioEngine.createGain()
     @masterFader.connect(@audioEngine.destination)
-
-    @$scope.isPlaying = false
 
   buildChannelStrip: ->
     # create audio nodes for each control
@@ -45,7 +43,7 @@ class MainController
       @audioEngine.decodeAudioData(response.data, @_createBufferNode)
 
   _createBufferNode: (buffer) =>
-      @$scope.channelStrip.source.buffer = buffer
+    @$scope.channelStrip.source.buffer = buffer
 
   play: =>
     @$scope.channelStrip.source.node = @audioEngine.createBufferSource()
@@ -53,11 +51,9 @@ class MainController
     @$scope.channelStrip.source.node.loop = true
     @$scope.channelStrip.source.node.connect(@$scope.channelStrip.controls[0].node)
     @$scope.channelStrip.source.node.start(0, 0)
-    @$scope.isPlaying = true
 
   stop: =>
     @$scope.channelStrip.source.node.stop(0)
-    @$scope.isPlaying = false
 
   reset: =>
     for control in @$scope.channelStrip.controls
@@ -67,5 +63,24 @@ class MainController
         else
           control.node[param].value = value
 
+
+
+class TransportController
+  constructor: (@$scope, @transportService) ->
+    @$scope.isPlaying = false
+    @$scope.play = @play
+    @$scope.stop = @stop
+
+  play: =>
+    @transportService.play()
+    @$scope.isPlaying = true
+
+  stop: =>
+    @transportService.stop()
+    @$scope.isPlaying = false
+
+
+
 angular.module('webAudioApp')
   .controller 'MainController', ['$scope', '$http', 'channelStripFactory', MainController]
+  .controller 'TransportController', ['$scope', 'transportService', TransportController]

@@ -1,0 +1,9 @@
+<form class="eq">
+  <div ng-repeat="control in channelStrip.controls | filter:{type:'biquad'}">
+    {{control.name}} gain: {{control.node.gain.value}}
+    <input type="range" min="{{control.limits.gain.min}}" max="{{control.limits.gain.max}}" ng-model="control.node.gain.value" />
+
+    <span ng:if="control.node.type == 'peaking'">{{control.name}} frequency: {{control.node.frequency.value}}</span>
+    <input type="range" min="{{control.limits.frequency.min}}" max="{{control.limits.frequency.max}}" ng-model="control.node.frequency.value" ng-if="control.node.type == 'peaking'" />
+  </div>
+</form>

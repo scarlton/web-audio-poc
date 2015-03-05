@@ -7,7 +7,8 @@
     "connect": "^3.3.3",
     "serve-static": "^1.7.1",
     "bootstrap": "^3.3.1",
-    "font-awesome": "^4.2.0"
+    "font-awesome": "^4.2.0",
+    "angular-ui-router": "^0.2.13"
   },
   "devDependencies": {
     "gulp": "^3.8.10",
