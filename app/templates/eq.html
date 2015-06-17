@@ -1,9 +1,16 @@
 <form class="eq">
-  <div ng-repeat="control in channelStrip.controls | filter:{type:'biquad'}">
+  <div ng-repeat="control in channelStrip | filter:{type:'biquad'}">
     {{control.name}} gain: {{control.node.gain.value}}
     <input type="range" min="{{control.limits.gain.min}}" max="{{control.limits.gain.max}}" ng-model="control.node.gain.value" />
 
     <span ng:if="control.node.type == 'peaking'">{{control.name}} frequency: {{control.node.frequency.value}}</span>
     <input type="range" min="{{control.limits.frequency.min}}" max="{{control.limits.frequency.max}}" ng-model="control.node.frequency.value" ng-if="control.node.type == 'peaking'" />
   </div>
+
+
+  <!-- <svg width="256" height="256">
+    <g ng-repeat="db in frequencyData track by $index">
+      <line ng-attr-x1="{{$index}}" y1="256" ng-attr-x2="{{$index}}" ng-attr-y2="{{256 - db}}">
+    </g>
+  </svg> -->
 </form>

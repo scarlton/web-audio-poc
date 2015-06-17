@@ -18,7 +18,7 @@ onError = (err) ->
   notify.onError(
     title: 'Gulp'
     subtitle: 'Build failure'
-    message: "Error: <%= error.message %>"
+    message: "Error: <%= error.message %>\nin <%= error.filename %> on line <%= error.location.first_line %>"
     sound: false
   )(err)
 

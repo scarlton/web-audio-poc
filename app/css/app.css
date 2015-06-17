@@ -21,8 +21,19 @@ body {
   background-image: -webkit-linear-gradient(top, #989898, #666666);
   padding: 5px 5px 5px 20px;
 }
+.transport .btn-group {
+  margin-right: 20px;
+}
 .main {
   padding: 20px 40px;
+}
+line {
+  stroke: #333;
+}
+meter {
+  display: block;
+  height: 22px;
+  width: 150px;
 }
 
 .lesson-header {

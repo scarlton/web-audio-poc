@@ -2,21 +2,22 @@ Config = ($stateProvider, $urlRouterProvider) ->
   window.requestAnimationFrame = window.requestAnimationFrame or window.webkitRequestAnimationFrame or window.mozRequestAnimationFrame
   window.AudioContext = window.AudioContext or window.webkitAudioContext
 
-  $urlRouterProvider.otherwise('/main')
+  $urlRouterProvider.otherwise('/eq/1')
 
-  $stateProvider.state 'main',
-    url: '/main'
+  $stateProvider.state 'eq',
+    url: '/eq/:lessonNumber'
     views:
-      'sidebar':
+      sidebar:
+        controller: 'LessonController'
         templateUrl: 'templates/sidebar.html'
 
-      'transport':
-        templateUrl: 'templates/transport.html'
+      transport:
         controller: 'TransportController'
+        templateUrl: 'templates/transport.html'
 
-      'mixarea':
-        templateUrl: 'templates/mixarea.html'
-        controller: 'MainController'
+      mixarea:
+        controller: 'EqController'
+        templateUrl: 'templates/eq.html'
 
 
 angular.module('webAudioApp')

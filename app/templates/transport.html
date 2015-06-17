@@ -2,3 +2,8 @@
   <button class="btn btn-lg" ng-click="stop()" ng-disabled="!isPlaying"><i class="fa fa-stop"></i></button>
   <button class="btn btn-lg" ng-click="play()" ng-disabled="isPlaying"><i class="fa fa-play"></i></button>
 </div>
+
+<div class="btn-group" role="group">
+  <meter min="-60" max="0" ng-attr-value="{{volume[0]}}"></meter>
+  <meter min="-60" max="0" ng-attr-value="{{volume[1]}}"></meter>
+</div>
