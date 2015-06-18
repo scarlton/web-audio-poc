@@ -1,1 +1,1 @@
-angular.module('webAudioApp', ['ui.router', 'ngSanitize'])
+angular.module('webAudioApp', ['ui.router'])

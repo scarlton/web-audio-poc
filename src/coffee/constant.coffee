@@ -42,7 +42,7 @@ angular.module('webAudioApp')
           type: 'peaking'
           frequency: 4000
           gain: 0
-          q: 1.414
+          Q: 1.414
         limits:
           gain:
             max: 15
@@ -78,7 +78,7 @@ angular.module('webAudioApp')
           type: 'peaking'
           frequency: 4000
           gain: 0
-          q: 1.414
+          Q: 1.414
         limits:
           gain:
             max: 15

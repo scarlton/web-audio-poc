@@ -1,7 +1,7 @@
 class EqController
   constructor: (@$scope, $stateParams, audioEngineService, EQ_TYPES) ->
     audioEngineService.initLesson($stateParams.lessonNumber)
-    @$scope.channelStrip = audioEngineService.buildChannelStrip(EQ_TYPES.FOURBANDSEMIPARAMETRIC)
+    @$scope.channelStrip = audioEngineService.buildChannelStrip(EQ_TYPES.THREEBAND)
 
   reset: =>
     for control in @$scope.channelStrip.controls
